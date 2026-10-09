@@ -1,0 +1,32 @@
+[
+  {
+    "case_name": "R v Smith",
+    "neutral_citation": "[2025] EWHC 1201",
+    "judge": "Mr Justice Smith",
+    "court": "High Court",
+    "decision_date": "2025-06-12",
+    "parties": "R v Smith",
+    "keywords": ["civil", "contract", "damages"],
+    "content": "The claimant sought damages for breach of contract after the defendant failed to deliver goods on time. The court considered the evidence and awarded partial damages."
+  },
+  {
+    "case_name": "Jones v Employment Tribunal Appeal Board",
+    "neutral_citation": "[2026] EAT 87",
+    "judge": "Judge Mellor",
+    "court": "Employment Appeal Tribunal",
+    "decision_date": "2026-01-21",
+    "parties": "Jones v Employment Tribunal Appeal Board",
+    "keywords": ["employment", "tribunal", "unfair dismissal"],
+    "content": "The appellant challenged the decision of the industrial tribunal. The court held that the tribunal had erred in applying the legal test and remitted the matter for rehearing."
+  },
+  {
+    "case_name": "Acme Ltd v Local Authority",
+    "neutral_citation": "[2025] EWCA Civ 455",
+    "judge": "Lady Justice Patel",
+    "court": "Court of Appeal",
+    "decision_date": "2025-09-03",
+    "parties": "Acme Ltd v Local Authority",
+    "keywords": ["appeal", "public law", "judicial review"],
+    "content": "The appeal concerned the lawfulness of a local authority decision under the planning regime. The Court of Appeal found that the decision was materially flawed and quashed it."
+  }
+]
