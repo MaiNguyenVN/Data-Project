@@ -14,7 +14,10 @@ def load_case_data() -> pd.DataFrame:
         return pd.DataFrame()
 
     conn = sqlite3.connect(DB_PATH)
-    query = "SELECT case_name, neutral_citation, judge, court, decision_date, parties, keywords, content FROM cases"
+    query = (
+        "SELECT case_name, neutral_citation, judge, court, decision_date, parties, keywords, "
+        "content, source, source_url, fetch_date FROM cases"
+    )
     df = pd.read_sql_query(query, conn)
     conn.close()
     return df
@@ -33,6 +36,7 @@ st.sidebar.header("Filters")
 judge_filter = st.sidebar.text_input("Judge")
 court_filter = st.sidebar.text_input("Court")
 keyword_filter = st.sidebar.text_input("Keyword")
+source_filter = st.sidebar.text_input("Source")
 
 filtered = all_cases.copy()
 if judge_filter:
@@ -41,13 +45,19 @@ if court_filter:
     filtered = filtered[filtered["court"].str.contains(court_filter, case=False, na=False)]
 if keyword_filter:
     filtered = filtered[filtered["keywords"].fillna("").str.contains(keyword_filter, case=False, na=False)]
+if source_filter:
+    filtered = filtered[filtered["source"].fillna("").str.contains(source_filter, case=False, na=False)]
 
 st.metric("Cases shown", len(filtered))
 
 if filtered.empty:
     st.info("No matching cases were found for the selected filters.")
 else:
-    st.dataframe(filtered, use_container_width=True, hide_index=True)
+    st.dataframe(
+        filtered[["case_name", "neutral_citation", "judge", "court", "decision_date", "source"]],
+        use_container_width=True,
+        hide_index=True,
+    )
 
     st.subheader("Case details")
     selected_case = st.selectbox(
@@ -63,5 +73,9 @@ else:
     st.write(f"**Decision date:** {case['decision_date']}")
     st.write(f"**Parties:** {case['parties']}")
     st.write(f"**Keywords:** {case['keywords']}")
+    st.write(f"**Source:** {case.get('source', 'Unknown source')}")
+    st.write(f"**Fetched:** {case.get('fetch_date', 'Unknown date')}")
+    if case.get("source_url"):
+        st.markdown(f"[Open source record]({case['source_url']})")
     st.write("**Summary:**")
     st.write(case["content"])

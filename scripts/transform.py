@@ -5,6 +5,7 @@ from __future__ import annotations
 
 import json
 import sqlite3
+from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
 
@@ -23,6 +24,9 @@ def normalize_case(raw_case: dict[str, Any]) -> dict[str, Any]:
     parties = raw_case.get("parties") or raw_case.get("party_names") or case_name
     keywords = raw_case.get("keywords") or []
     content = raw_case.get("content") or raw_case.get("summary") or "No summary available."
+    source = raw_case.get("source") or "Sample dataset"
+    source_url = raw_case.get("source_url") or ""
+    fetch_date = raw_case.get("fetch_date") or datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
 
     if isinstance(keywords, str):
         keywords = [keyword.strip() for keyword in keywords.split(",") if keyword.strip()]
@@ -36,6 +40,9 @@ def normalize_case(raw_case: dict[str, Any]) -> dict[str, Any]:
         "parties": parties,
         "keywords": ", ".join(keywords),
         "content": content,
+        "source": source,
+        "source_url": source_url,
+        "fetch_date": fetch_date,
     }
 
 
@@ -53,8 +60,8 @@ def transform_cases() -> list[dict[str, Any]]:
     conn.executemany(
         """
         INSERT OR REPLACE INTO cases
-        (case_name, neutral_citation, judge, court, decision_date, parties, keywords, content)
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+        (case_name, neutral_citation, judge, court, decision_date, parties, keywords, content, source, source_url, fetch_date)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
         """,
         [
             (
@@ -66,6 +73,9 @@ def transform_cases() -> list[dict[str, Any]]:
                 row["parties"],
                 row["keywords"],
                 row["content"],
+                row["source"],
+                row["source_url"],
+                row["fetch_date"],
             )
             for row in normalized
         ],

@@ -7,9 +7,13 @@ CREATE TABLE IF NOT EXISTS cases (
     decision_date TEXT,
     parties TEXT,
     keywords TEXT,
-    content TEXT
+    content TEXT,
+    source TEXT DEFAULT 'Sample dataset',
+    source_url TEXT,
+    fetch_date TEXT DEFAULT (date('now'))
 );
 
 CREATE INDEX IF NOT EXISTS idx_cases_judge ON cases(judge);
 CREATE INDEX IF NOT EXISTS idx_cases_court ON cases(court);
 CREATE INDEX IF NOT EXISTS idx_cases_date ON cases(decision_date);
+CREATE INDEX IF NOT EXISTS idx_cases_source ON cases(source);
